@@ -1,0 +1,157 @@
+// @TODO: YOUR CODE HERE!
+var svgWidth = 960;
+// var svgHeight = 500;
+var svgHeight = 620;
+// Define the chart's margins as an object
+var margin = {
+    // top: 30,
+    // right: 70,
+    // bottom: 25,
+    // left: 100
+    top: 20,
+    right: 40,
+    bottom: 100,
+    left: 100
+};
+// };
+
+// Define dimensions of the chart area
+var chartWidth = svgWidth - margin.left - margin.right;
+var chartHeight = svgHeight - margin.top - margin.bottom;
+
+// Select body, append SVG area to it, and set the dimensions
+var svg = d3.select("#scatter")
+    .append("svg")
+    .attr("height", svgHeight)
+    .attr("width", svgWidth);
+
+// Append a group to the SVG area and shift ('translate') it to the right and to the bottom
+var chartGroup = svg.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+//load data from csv file
+
+d3.csv("data.csv").then(function (Data) {
+
+    console.log(Data);
+
+    // var state = Data.map(d => d.abbr);
+    // console.log(state);
+
+    // var pov = Data.map(d => d.poverty);
+    // console.log(pov);
+
+    // var healthCare = Data.map(d => d.healthcare);
+    // console.log(healthCare);
+
+    Data.forEach(function (data) {
+        data.poverty = +data.poverty;
+        data.healthcare = +data.healthcare;
+    });
+    // extent = min and max 
+    // range b/w min and max = (max-  min)
+    // scale percentage - 0.05 
+    //(min extent - range ) * scale 
+    // (max extent + range) * scale 
+    // to bring the contect within the axis
+    
+    var extent1 =  d3.extent(Data, d => d.poverty)
+    var extent2= d3.extent(Data, d => d.healthcare)
+
+    var range1 = extent1[1]- extent1[0]
+    var scale = 0.05
+    var domain1 = [
+        extent1[0] - range1 * scale,
+        extent1[1] + range1 * scale
+    ]
+
+    var range2 = extent2[1]- extent2[0]
+    var domain2= [
+        extent2[0] - range2 * scale,
+        extent2[1] + range2 * scale
+    ]
+
+    // console.log("Extent: ",extent);
+    // console.log("Range:", range);
+    // console.log(domain)
+
+
+    var xScale = d3.scaleLinear()
+        .domain(domain1)
+        .range([0, chartWidth]);
+
+    var yScale = d3.scaleLinear()
+        .domain( domain2)
+        .range([chartHeight,0]);
+
+    var bottomAxis = d3.axisBottom(xScale);
+
+    var leftAxis = d3.axisLeft(yScale);
+
+    var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.state});
+    svg.call(tip)
+
+    chartGroup.append("g")
+        .call(leftAxis);
+
+    chartGroup.append("g")
+        .attr("transform", `translate(0, ${chartHeight})`)
+        .call(bottomAxis);
+
+    // var circlesGroup = chartGroup.selectAll("circle")
+    chartGroup.selectAll("circle")
+        .data(Data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.poverty))
+        .attr("cy", d => yScale(d.healthcare))
+        .attr("r", "10")
+        .attr("fill", "red")
+        .style("opacity", 0.5)
+        .attr("stroke", "white")
+        .on("mouseover", tip.show )
+        .on('mouseout', tip.hide);
+        // chart titlee
+
+    chartGroup.selectAll(null)
+        .data(Data)
+        .enter()
+        .append("text")
+        .attr("x", d => xScale(d.poverty))
+        .attr("y", d => yScale(d.healthcare))
+        .attr("dy", "0.4em")
+        .text(d =>d.abbr)
+        .classed("stateText", true)
+        .on("mouseover", tip.show )
+        .on('mouseout', tip.hide);
+
+    // X axis label
+    chartGroup.append("text")
+        .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + margin.top + 20})`)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "16px")
+        .attr("fill", "green")
+        .attr("class", "axisText")
+        .style("text-anchor", "middle")
+        .text("In Poverty (%)");
+
+    // Y axis label
+    chartGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", 0-chartHeight/2)
+        .attr("y", 0-margin.left +50)
+        .attr("class", "axisText")
+        .attr("fill",'green')
+        .style("text-anchor", "middle")
+        .text("Lacks- Healthcare(%");
+
+
+
+    var toolTip = d3.select("body")
+        .append("div")
+        .classed("tooltip", true);
+    
+    
+
+    // chartGroup.on("mouseover", tip.show )
+
+})
