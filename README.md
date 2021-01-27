@@ -1,6 +1,14 @@
 # D3-Challenge
 
-The app1.js is where the code is not working. 
-The issue is when i moveover each circle i need the abbr of the state to be displayed and i need porvertyMoe, incomeMoe to been shown in the tool tip as well. 
-i have attached the error screen to show where the error is.
+Need to create scatter plot between two of the data variables Healthcare and Poverty.
+
+Using the D3 techniques we taught you in class, create a scatter plot that represents each state with circle elements. You'll code this graphic in the app.js file of your homework directory—make sure you pull in the data from data.csv by using the d3.csv function. Your scatter plot should ultimately appear like the image at the top of this section.
+
+
+Include state abbreviations in the circles.
+
+
+Create and situate your axes and labels to the left and bottom of the chart.
+
+
 
