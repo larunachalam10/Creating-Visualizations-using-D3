@@ -1,14 +1,9 @@
-# D3-Challenge
+# Data Journalism and D3
 
-Need to create scatter plot between two of the data variables Healthcare and Poverty.
+Summary
+The project aims to understand health risks facing particular demographics by examining information from the U.S. Census Bureau and the Behavioral Risk Factor Surveillance System and creating visualizations using D3.
 
-Using the D3 techniques we taught you in class, create a scatter plot that represents each state with circle elements. You'll code this graphic in the app.js file of your homework directory—make sure you pull in the data from data.csv by using the d3.csv function. Your scatter plot should ultimately appear like the image at the top of this section.
-
-
-Include state abbreviations in the circles.
-
-
-Create and situate your axes and labels to the left and bottom of the chart.
-
+Source of Data
+https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml. The current data set includes data on rates of income, obesity, poverty, etc. by state. MOE stands for "margin of error."
 
 
